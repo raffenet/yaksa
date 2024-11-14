@@ -19,7 +19,7 @@ import gencomm
 ########################################################################################
 
 num_paren_open = 0
-builtin_types = [ "_Bool", "char", "wchar_t", "int8_t", "int16_t", \
+builtin_types = [ "_Bool", "_Float16", "char", "wchar_t", "int8_t", "int16_t", \
                   "int32_t", "int64_t", "float", "double", "long double", "c_complex", "c_double_complex", "c_long_double_complex" ]
 blklens = [ "1", "2", "3", "4", "5", "6", "7", "8", "generic" ]
 builtin_maps = { }
@@ -180,13 +180,13 @@ def generate_kernels(b, darray, blklen):
                 b = "long double _Complex"
 
             if (func == "pack"):
-                if ((b == "float" or b == "double" or b == "long double") and
+                if ((b == "float" or b == "double" or b == "long double" or b == "_Float16") and
                     (op == "MAX" or op == "MIN")):
                     yutils.display(OUTFILE, "YAKSURI_SEQI_OP_%s_FLOAT(%s, *((const %s *) (const void *) (sbuf + %s)), *((%s *) (void *) (dbuf + idx)));\n" % (op, b, b, s, b))
                 else:
                     yutils.display(OUTFILE, "YAKSURI_SEQI_OP_%s(*((const %s *) (const void *) (sbuf + %s)), *((%s *) (void *) (dbuf + idx)));\n" % (op, b, s.replace(type,b), b))
             else:
-                if ((b == "float" or b == "double" or b == "long double") and
+                if ((b == "float" or b == "double" or b == "long double" or b == "_Float16") and
                     (op == "MAX" or op == "MIN")):
                     yutils.display(OUTFILE, "YAKSURI_SEQI_OP_%s_FLOAT(%s, *((const %s *) (const void *) (sbuf + idx)), *((%s *) (void *) (dbuf + %s)));\n" % (op, b, b, b, s))
                 else:

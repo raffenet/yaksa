@@ -12,6 +12,7 @@ import yutils
 ## pack functions
 derived_types = [ "hvector", "blkhindx", "hindexed", "contig", "resized" ]
 type_ops = {'_Bool': {'REPLACE', 'LAND', 'LOR', 'LXOR'},
+            '_Float16': {'REPLACE', 'SUM', 'PROD', 'MIN', 'MAX'},
             'bool': {'REPLACE', 'LAND', 'LOR', 'LXOR'},
             'char': {'REPLACE'},
             'wchar_t': {'REPLACE'},
