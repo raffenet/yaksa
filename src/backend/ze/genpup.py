@@ -23,7 +23,7 @@ import gencomm
 
 num_paren_open = 0
 blklens = [ "generic" ]
-builtin_types = [ "char", "int8_t", "int16_t", \
+builtin_types = [ "_Float16", "char", "int8_t", "int16_t", \
                   "int32_t", "int64_t", "float", "double", "c_complex", "c_double_complex"]
 
 builtin_maps = {
@@ -245,14 +245,14 @@ def generate_kernels(b, darray, op):
         elif (func == "pack_LXOR"):
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + idx * sizeof(%s))) = !(*((%s *) (void *) (dbuf + idx * sizeof(%s)))) != !(*((const %s *) (const void *) (sbuf + %s)));\n"
                                         % (b, b, b, b, b, s))
-        elif (func == "pack_MAX" and (b == "float" or b == "double")):
+        elif (func == "pack_MAX" and (b == "float" or b == "double" or b == "_Float16")):
             yutils.display(OUTFILE, "    %s x_[2] = {*((const %s *) (const void *) (sbuf + %s)), *((%s *) (void *) (dbuf + idx * sizeof(%s)))};\n" % (b, b, s, b, b))
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + idx * sizeof(%s))) = x_[*((const %s *) (const void *) (sbuf + %s)) < *((%s *) (void *) (dbuf + idx * sizeof(%s)))];\n"
                     % (b, b, b, s, b, b))
         elif (func == "pack_MAX"):
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + idx * sizeof(%s))) = *((const %s *) (const void *) (sbuf + %s)) ^ ((*((const %s *) (const void *) (sbuf + %s)) ^ *((%s *) (void *) (dbuf + idx * sizeof(%s)))) & -( *((const %s *) (const void *) (sbuf + %s)) < *((%s *) (void *) (dbuf + idx * sizeof(%s)))));\n"
                     % (b, b, b, s, b, s, b, b, b, s, b, b))
-        elif (func == "pack_MIN" and (b == "float" or b == "double")):
+        elif (func == "pack_MIN" and (b == "float" or b == "double" or b == "_Float16")):
             yutils.display(OUTFILE, "    %s x_[2] = {*((const %s *) (const void *) (sbuf + %s)), *((%s *) (void *) (dbuf + idx * sizeof(%s)))};\n" % (b, b, s, b, b))
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + idx * sizeof(%s))) = x_[*((const %s *) (const void *) (sbuf + %s)) > *((%s *) (void *) (dbuf + idx * sizeof(%s)))];\n"
                     % (b, b, b, s, b, b))
@@ -293,14 +293,14 @@ def generate_kernels(b, darray, op):
         elif (func == "unpack_LXOR"):
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + %s)) = !(*((%s *) (void *) (dbuf + %s))) != !(*((const %s *) (const void *) (sbuf + idx * sizeof(%s))));\n"
                                        % (b, s, b, s, b, b))
-        elif (func == "unpack_MAX" and (b == "float" or b == "double")):
+        elif (func == "unpack_MAX" and (b == "float" or b == "double" or b == "_Float16")):
             yutils.display(OUTFILE, "    %s x_[2] = {*((const %s *) (const void *) (sbuf + idx * sizeof(%s))), *((%s *) (void *) (dbuf + %s))};\n" % (b, b, b, b, s))
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + %s)) = x_[*((const %s *) (const void *) (sbuf + idx * sizeof(%s))) < *((%s *) (void *) (dbuf + %s))];\n"
                     % (b, s, b, b, b, s))
         elif (func == "unpack_MAX"):
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + %s)) = *((const %s *) (const void *) (sbuf + idx * sizeof(%s))) ^ ((*((const %s *) (const void *) (sbuf + idx * sizeof(%s))) ^ *((%s *) (void *) (dbuf + %s))) & -( *((const %s *) (const void *) (sbuf + idx * sizeof(%s))) < *((%s *) (void *) (dbuf + %s))));\n"
                     % (b, s, b, b, b, b, b, s, b, b, b, s))
-        elif (func == "unpack_MIN" and (b == "float" or b == "double")):
+        elif (func == "unpack_MIN" and (b == "float" or b == "double" or b == "_Float16")):
             yutils.display(OUTFILE, "    %s x_[2] = {*((const %s *) (const void *) (sbuf + idx * sizeof(%s))), *((%s *) (void *) (dbuf + %s))};\n" % (b, b, b, b, s))
             yutils.display(OUTFILE, "*((%s *) (void *) (dbuf + %s)) = x_[*((const %s *) (const void *) (sbuf + idx * sizeof(%s))) > *((%s *) (void *) (dbuf + %s))];\n"
                     % (b, s, b, b, b, s))
