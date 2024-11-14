@@ -138,6 +138,8 @@ typedef uint64_t yaksa_type_t;
 #define YAKSA_TYPE__SHORT_INT                         ((yaksa_type_t) 55)
 #define YAKSA_TYPE__LONG_DOUBLE_INT                   ((yaksa_type_t) 56)
 
+#define YAKSA_TYPE__C_FLOAT16                         ((yaksa_type_t) 57)
+
 /*! @} */
 
 
